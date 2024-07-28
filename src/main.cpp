@@ -12,11 +12,11 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 MFRC522::MIFARE_Key key;
 
-const char* ssid = "B612";
-const char* password = "SheReallyIs1";
-const char* serverUrl = "http://192.168.100.15:3100/api/chargeVerfiy/merchant-initiate-verify";
+const char* ssid = "SSID";
+const char* password = "Pass";
+const char* serverUrl = "http://192.168.100.1:3100/api/";
 const char* deviceId = "98029792-d500-489a-9f02-ac1cbb3a68a1";
-const char* apiKey = "eb37cec3bc5133ec7028f0472acb0bb0adda578bae1e4dc88c0ac153bedd6208";
+const char* apiKey = "keeysss";
 
 void setup() {
   Serial.begin(115200);
