@@ -1,4 +1,3 @@
-//build with arduino ide
 #include <SPI.h>
 #include <MFRC522.h>
 #include <WiFi.h>
@@ -15,7 +14,7 @@ MFRC522::MIFARE_Key key;
 const char* ssid = "SSID";
 const char* password = "Pass";
 const char* serverUrl = "http://192.168.100.1:3100/api/";
-const char* deviceId = "98029792-d500-489a-9f02-ac1cbb3a68a1";
+const char* deviceId = "98029792-d500-ac1cbb3a68a1";
 const char* apiKey = "keeysss";
 
 void setup() {
@@ -62,7 +61,7 @@ String readCardData() {
   byte buffer[18];
   MFRC522::StatusCode status;
 
-  // Start reading from sector 3, block 12 (as in the writing process)
+  // Start reading from sector 3, block 12
   int startBlock = 12;
   int endBlock = 63;
 
@@ -90,12 +89,11 @@ String readCardData() {
       return "";
     }
 
-    // Append non-zero bytes to content
     for (byte i = 0; i < 16; i++) {
       if (buffer[i] != 0) {
         content += (char)buffer[i];
       } else {
-        // Stop reading if we encounter a null byte (end of data)
+        // Stop reading if we encounter a null byte
         Serial.print("Card data: ");
         Serial.println(content);
         return content;
@@ -153,14 +151,12 @@ void sendDataToServer(String cardData) {
 }
 
 String generateSignature(const String& deviceId, const String& timestamp) {
-  String data = deviceId + timestamp;
   
   mbedtls_md_context_t ctx;
   mbedtls_md_type_t md_type = MBEDTLS_MD_SHA256;
   
   mbedtls_md_init(&ctx);
   mbedtls_md_setup(&ctx, mbedtls_md_info_from_type(md_type), 1);
-  mbedtls_md_hmac_starts(&ctx, (const unsigned char*)apiKey, strlen(apiKey));
   mbedtls_md_hmac_update(&ctx, (const unsigned char*)data.c_str(), data.length());
   
   unsigned char hmac[32];
